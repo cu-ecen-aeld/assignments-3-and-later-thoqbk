@@ -46,6 +46,8 @@ fi
 
 echo "Adding the Image in outdir"
 
+cp -r ${OUTDIR}/linux-stable/arch/${ARCH}/boot/Image ${OUTDIR}
+
 echo "Creating the staging directory for the root filesystem"
 cd "$OUTDIR"
 if [ -d "${OUTDIR}/rootfs" ]
@@ -78,7 +80,7 @@ else
 fi
 
 # DONE: Make and install busybox
-# make distclean
+make distclean
 make defconfig
 make -j4 ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE}
 make CONFIG_PREFIX=${OUTDIR}/rootfs ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE} install
@@ -93,10 +95,15 @@ cp ${SYSROOT}/lib/ld-linux-aarch64.so.1 ${OUTDIR}/rootfs/lib
 
 cp ${SYSROOT}/lib64/libresolv.so.2 ${OUTDIR}/rootfs/lib64
 
+cp $SYSROOT/lib64/libm.so.6 $OUTDIR/rootfs/lib64/
+
 cp ${SYSROOT}/lib64/libc.so.6 ${OUTDIR}/rootfs/lib64
+
+cp $SYSROOT/lib64/ld-2.33.so* $OUTDIR/rootfs/lib64/
 
 # DONE: Make device nodes
 sudo mknod -m 666 dev/null c 1 3
+
 sudo mknod -m 666 dev/console c 5 1
 
 # DONE: Clean and build the writer utility
