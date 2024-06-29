@@ -111,7 +111,7 @@ cd $FINDER_APP_DIR
 
 make clean
 
-make CROSS_COMPILE=${CROSS_COMPILE}
+make ARCH=${ARCH} CROSS_COMPILE=${CROSS_COMPILE}
 
 # DONE: Copy the finder related scripts and executables to the /home directory
 # on the target rootfs
@@ -121,10 +121,12 @@ mkdir -p ${OUTDIR}/rootfs/home/conf
 
 cp conf/username.txt conf/assignment.txt ${OUTDIR}/rootfs/home/conf
 
-# DONE: Chown the root directory
-chown -R root:root ${OUTDIR}/rootfs
+cp writer ${OUTDIR}/rootfs/home
 
-# DONE: Create initramfs.cpio.gz
+# DONE: Chown the root directory
 cd ${OUTDIR}/rootfs
 
+chown -R root:root *
+
+# DONE: Create initramfs.cpio.gz
 find . | cpio -H newc -ov --owner root:root | gzip > ${OUTDIR}/initramfs.cpio.gz

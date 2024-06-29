@@ -1,3 +1,4 @@
+#!/bin/sh
 if [ "$#" != "2" ]; then
    echo "Must pass in exactly 2 arguments for filesdir and searchstr"
    exit 1
